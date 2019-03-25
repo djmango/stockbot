@@ -58,3 +58,4 @@ docs/_build/
 target/
 .vscode/
 keys.env
+keys.json

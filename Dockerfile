@@ -1,4 +1,5 @@
-FROM python:3
+FROM python:3.5
 ADD bot.py /
-RUN pip install --user -U https://github.com/Rapptz/discord.py/archive/rewrite.zip
+RUN pip install discord.py
+RUN pip install requests
 CMD [ "python", "./bot.py" ]
