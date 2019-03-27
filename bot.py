@@ -5,84 +5,50 @@
 import json
 import logging
 import os
-import random
+import sys
+import traceback
 
 import discord
-import requests
 from discord.ext import commands
 
-# consts
-IEX_ENDPOINT = 'https://api.iextrading.com/1.0/'
-
 # setup
+def get_prefix(bot, message):
+    """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
+
+    # credit to @EvieePy, this is based on her example
+    prefixes = ['sb!', 'stocks', '!!']
+
+    # Check to see if we are outside of a guild. e.g DM's etc.
+    if not message.guild:
+        # Only allow ? to be used in DMs
+        return '?'
+
+    # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
+    return commands.when_mentioned_or(*prefixes)(bot, message)
+
+
+# Below cogs represents our folder our cogs are in. Following is the file name. So 'meme.py' in cogs, would be cogs.meme
+# Think of it like a dot path import
+initial_extensions = ['cogs.member', 'cogs.owner', 'cogs.simple']
 
 logging.basicConfig(level=logging.INFO)
 description = '''possibly the most stupid bot to have ever been created'''
 bot = commands.Bot(command_prefix='sb!', description=description)
-discord.ext.commands.group(name='stocks')
+
+# Here we load our extensions(cogs) listed above in [initial_extensions].
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception as e:
+            print(f'Failed to load extension {extension}.', file=sys.stderr)
+            traceback.print_exc()
 
 # on start
 @bot.event
 async def on_ready():
-    logging.info('Logged in as' + bot.user.name)
-    logging.info(bot.user.id)
-    logging.info('------')
-    await bot.change_presence(game=discord.Game(name='sb! | the stock bot | @djmango'))
-
-# on member join
-@bot.event
-async def joined(member: discord.Member):
-    """Says when a member joined."""
-    await bot.say('{0.name} joined in {0.joined_at}'.format(member))
-
-# commands
-@bot.command()
-async def add(left: int, right: int):
-    """Adds two numbers together."""
-    await bot.say(left + right)
-
-
-@bot.command(pass_context=True)
-async def roll(ctx, dice: str):
-    """Rolls a dice in NdN format."""
-    try:
-        rolls, limit = map(int, dice.split('d'))
-    except Exception:
-        await bot.say('Format has to be in NdN! Ex: 3d6 = three six-sided dice')
-        return
-
-    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-    await bot.say(result)
-
-
-@bot.command(description='For when you wanna settle the score some other way', group='Other')
-async def choose(*choices: str):
-    """Chooses between multiple choices."""
-    await bot.say(random.choice(choices))
-
-# TODO: create a once-per-day updated list of possible symbols
-@bot.command(description='Get info on a stock given a symbol', group='Stocks', pass_context=True)
-async def stock(ctx, symbol):
-    # get stock price
-    params = {'symbols': symbol}
-    r = requests.get(IEX_ENDPOINT + "/tops/last", params=params)
-    iexStock = r.json()[0]
-
-    # get actual company name
-    r = requests.get('http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=' +
-                     symbol + '&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback')
-    yahooStock = r.text
-    yahooStock = yahooStock[39:][:-2]
-    yahooStock = json.loads(yahooStock)['ResultSet']['Result'][0]
-
-    # TODO: logo pulling, more rich embed stuff
-    # format embed
-    e = discord.Embed(title=yahooStock['name'],
-                      type='rich', colour=discord.Colour.teal())
-    e.add_field(name='Price', value=iexStock['price'])
-
-    # send
-    await bot.send_message(destination=ctx.message.channel, embed=e)
+    logging.info(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name='sb! | the stock bot | @djmango'))
 
 # login
 if os.getenv('BOTKEY'):

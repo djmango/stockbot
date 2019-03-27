@@ -1,5 +1,5 @@
 FROM python:3.5
 ADD bot.py /
-RUN pip install discord.py
-RUN pip install requests
-CMD [ "python", "./bot.py" ]
+ADD cogs /cogs
+RUN pip install --no-cache-dir -r requirements.txt
+CMD [ "python", "./bot.py"]
