@@ -1,7 +1,10 @@
 import random
 
 import discord
+import logging
+
 from discord.ext import commands
+
 
 """A simple cog example with simple commands. Showcased here are some check decorators, and the use of events in cogs.
 
@@ -70,6 +73,7 @@ class SimpleCog(commands.Cog):
     @commands.command(pass_context=True, name='roll')
     async def roll(self, ctx, dice: str):
         """Rolls a dice in NdN format."""
+
         try:
             rolls, limit = map(int, dice.split('d'))
         except Exception:
@@ -80,20 +84,20 @@ class SimpleCog(commands.Cog):
                            for r in range(rolls))
         await ctx.channel.send(result)
 
-    @commands.command(description='For when you wanna settle the score some other way', pass_context=True)
+    @commands.command(description='For when you wanna settle the score some other way', pass_context=True, name="choose")
     async def choose(self, ctx, *choices: str):
         """Chooses between multiple choices."""
         await ctx.channel.send(random.choice(choices))
 
     async def on_member_ban(self, guild, user):
         """Event Listener which is called when a user is banned from the guild.
-        For this example I will keep things simple and just print some info.
+        For this example I will keep things simple and just log some info.
         Notice how because we are in a cog class we do not need to use @bot.event
         For more information:
         http://discordpy.readthedocs.io/en/rewrite/api.html#discord.on_member_ban
         Check above for a list of events.
         """
-        print(f'{user.name}-{user.id} was banned from {guild.name}-{guild.id}')
+        logging.info(f'{user.name}-{user.id} was banned from {guild.name}-{guild.id}')
 
 
 def setup(bot):

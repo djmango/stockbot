@@ -20,7 +20,7 @@ class MembersCog(commands.Cog):
         if member is None:
             member = ctx.message.author
 
-        await self.bot.say(f'The top role for {member.display_name} is {member.top_role.name}')
+        await ctx.channel.send(f'The top role for {member.display_name} is {member.top_role.name}')
 
     @commands.command(pass_context=True, name='perms', aliases=['perms_for', 'permissions'])
     async def check_permissions(self, ctx, member: discord.Member = None):
@@ -42,7 +42,7 @@ class MembersCog(commands.Cog):
         # \uFEFF is a Zero-Width Space, which basically allows us to have an empty field name.
         embed.add_field(name='\uFEFF', value=perms)
 
-        await self.bot.say(content=None, embed=embed)
+        await ctx.channel.send(content=None, embed=embed)
         # Thanks to Gio for the Command. idk who gio is but it was in the example, so, congrats gio!
 
 
