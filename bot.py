@@ -31,7 +31,12 @@ def get_prefix(bot, message):
 # Think of it like a dot path import
 initial_extensions = ['cogs.member', 'cogs.owner', 'cogs.simple', 'cogs.stock']
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO, format=(
+    '%(asctime)s %(levelname)s %(name)s | %(message)s'))
+
+logger = logging.getLogger('bot')
+logger.setLevel(logging.DEBUG)
+
 description = '''possibly the most stupid bot to have ever been created'''
 bot = commands.Bot(command_prefix='sb!', description=description)
 
@@ -41,13 +46,13 @@ if __name__ == '__main__':
         try:
             bot.load_extension(extension)
         except Exception as e:
-            print(f'Failed to load extension {extension}.', file=sys.stderr)
+            logger.exception(f'Failed to load extension {extension}.', file=sys.stderr)
             traceback.print_exc()
 
 # on start
 @bot.event
 async def on_ready():
-    logging.info(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
+    logger.info(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(name='sb! | the stock bot | @djmango'))
 
 # login
