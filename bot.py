@@ -52,7 +52,8 @@ if __name__ == '__main__':
 # on start
 @bot.event
 async def on_ready():
-    logger.info(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
+    logger.info(f'Logged in as: {bot.user.name} - {bot.user.id}')
+    logger.info(f'Version: {discord.__version__}')
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(name='sb! | the stock bot | @djmango'))
 
 # login
