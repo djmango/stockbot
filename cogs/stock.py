@@ -58,7 +58,6 @@ class StockCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # TODO: create a once-per-day updated list of possible symbols, then check against that to see if were doing a company name or ticker
     @commands.command(description='Get info on a stock given a symbol', pass_context=True)
     async def stock(self, ctx, symbol):
 

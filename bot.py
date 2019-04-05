@@ -12,6 +12,8 @@ import discord
 from discord.ext import commands
 
 # setup
+
+
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
@@ -46,7 +48,8 @@ if __name__ == '__main__':
         try:
             bot.load_extension(extension)
         except Exception as e:
-            logger.exception(f'Failed to load extension {extension}.', file=sys.stderr)
+            logger.exception(
+                f'Failed to load extension {extension}.', file=sys.stderr)
             traceback.print_exc()
 
 # on start
