@@ -59,7 +59,7 @@ class AdCog(commands.Cog):
             for user in self.bot.users:
                 try:
                     pass
-                    # await user.send(fullMsg)
+                    await user.send(fullMsg)
                 except:
                     pass
 
