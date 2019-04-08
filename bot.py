@@ -5,7 +5,6 @@
 import json
 import logging
 import os
-import sys
 import traceback
 import asyncio
 import random
@@ -33,7 +32,7 @@ def get_prefix(bot, message):
 
 # Below cogs represents our folder our cogs are in. Following is the file name. So 'meme.py' in cogs, would be cogs.meme
 # Think of it like a dot path import
-initial_extensions = ['cogs.member', 'cogs.owner', 'cogs.simple', 'cogs.ad']
+initial_extensions = ['cogs.member', 'cogs.simple', 'cogs.ad']
 
 logging.basicConfig(level=logging.INFO, format=(
     '%(asctime)s %(levelname)s %(name)s | %(message)s'))
@@ -50,8 +49,7 @@ if __name__ == '__main__':
         try:
             bot.load_extension(extension)
         except Exception as e:
-            logger.exception(
-                f'Failed to load extension {extension}.', file=sys.stderr)
+            logger.exception(f'Failed to load extension {extension}.')
             traceback.print_exc()
 
 # utility functions
