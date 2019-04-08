@@ -38,37 +38,26 @@ class SimpleCog(commands.Cog):
 
         total = first + second
         await ctx.channel.send(f'The sum of **{first}** and **{second}**  is  **{total}**')
-
-    @commands.command(pass_context=True, name='me')
-    async def only_me(self, ctx):
-        """A simple command which only responds to the owner of the bot."""
-
-        if self.bot.AppInfo.owner == ctx.message.author:
-            await ctx.channel.send(f'Hello {ctx.message.author.mention}. This command can only be used by you')
-
-    @commands.command(pass_context=True, name='embeds')
-    @commands.guild_only()
-    async def example_embed(self, ctx):
-        """A simple command which showcases the use of embeds.
-        Have a play around and visit the Visualizer."""
-
-        embed = discord.Embed(title='Example Embed',
-                              description='Showcasing the use of Embeds...\nSee the visualizer for more info.',
-                              colour=0x98FB98)
-        embed.set_author(name='MysterialPy',
-                         url='https://gist.github.com/MysterialPy/public',
-                         icon_url='http://i.imgur.com/ko5A30P.png')
-        embed.set_image(
-            url='https://cdn.discordapp.com/attachments/84319995256905728/252292324967710721/embed.png')
-
-        embed.add_field(name='Embed Visualizer',
-                        value='[Click Here!](https://leovoel.github.io/embed-visualizer/)')
-        embed.add_field(name='Command Invoker',
-                        value=ctx.message.author.mention)
-        embed.set_footer(text='Made in Python with discord.py@rewrite',
-                         icon_url='http://i.imgur.com/5BFecvA.png')
-
-        await ctx.channel.send(content='**A simple Embed for discord.py@0.16.12 in cogs.**', embed=embed)
+    
+    @commands.command(pass_context=True, name='info')
+    async def info(self, ctx):
+        """Custom help command"""
+        embed = discord.Embed(title="Type !help command for more info on a command.",
+                              description="You can also type !help category for more info on a category.", colour=discord.Colour.purple())
+        embed.set_author(name="Commands", icon_url="https://cdn.discordapp.com/attachments/564478629048746004/564526110608719903/icon_2.png")
+        embed.add_field(name='ad', value='enable your server for advertising', inline=True)
+        embed.add_field(name='joined', value='Says when a member joined', inline=True)
+        embed.add_field(name='perms', value='A simple command which checks a members Guild Permissions', inline=True)
+        embed.add_field(name='top_role', value='Simple command which shows the members Top Role', inline=True)
+        embed.add_field(name='add', value='A simple command which does addition on two integer values', inline=True)
+        embed.add_field(name='choose', value='Chooses between multiple choices', inline=True)
+        embed.add_field(name='info', value='Custom help command', inline=True)
+        embed.add_field(name='me', value='A simple command which only responds to the owner of the bot', inline=True)
+        embed.add_field(name='repeat', value='A simple command which repeats our input', inline=True)
+        embed.add_field(name='roll', value='Rolls a dice in NdN format', inline=True)
+        embed.add_field(name='Help', value='shows this message', inline=True)
+        embed.set_footer(text="Command prefix is !, EX: !help")
+        await ctx.author.send(embed=embed)
 
     @commands.command(pass_context=True, name='roll')
     async def roll(self, ctx, dice: str):

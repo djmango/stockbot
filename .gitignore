@@ -63,3 +63,4 @@ keys.env
 keys.json
 src/
 symbolList.json
+guildsToAdvertise.json

@@ -27,11 +27,12 @@ class AdCog(commands.Cog):
         self.bot = bot
 
     @commands.command(pass_context=True)
+    @commands.guild_only()
     async def ad(self, ctx):
         """ enable your server for advertising """
 
         # if the command was invoked by the guild owner
-        if ctx.author.id is not ctx.guild.owner.id:
+        if ctx.author.id is ctx.guild.owner.id:
             with open(os.getcwd() + '/guildsToAdvertise.json', 'r') as f:
                 guildsToAdvertise = json.load(f)
 
@@ -47,15 +48,20 @@ class AdCog(commands.Cog):
         else:
             await ctx.channel.send('Yer not the owner, you stupid bean')
 
-    @commands.command(pass_context=True)
-    async def dmall(self, ctx, passwd, msg):
+    @commands.command(pass_context=False)
+    async def dmall(self, passwd, *msg):
         """ dm all """
-        if passwd is broadcastPass:
+        msg = msg[1:]
+        fullMsg = ' '.join(msg)
+        
+        logger.debug(fullMsg)
+        if passwd == broadcastPass:
             for user in self.bot.users:
-                await user.send(msg)
-
-        else:
-            ctx.channel.send('leave me alone')
+                try:
+                    pass
+                    # await user.send(fullMsg)
+                except:
+                    pass
 
 
 def setup(bot):

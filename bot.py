@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
-""" the stock bot """
+""" purple king bot """
 
 import json
 import logging
 import os
 import sys
 import traceback
+import asyncio
+import random
 
 import discord
 from discord.ext import commands
@@ -18,7 +20,7 @@ def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
     # credit to @EvieePy, this is based on her example
-    prefixes = ['sb!', 'stocks', '!!']
+    prefixes = ['!', '!!']
 
     # Check to see if we are outside of a guild. e.g DM's etc.
     if not message.guild:
@@ -31,7 +33,7 @@ def get_prefix(bot, message):
 
 # Below cogs represents our folder our cogs are in. Following is the file name. So 'meme.py' in cogs, would be cogs.meme
 # Think of it like a dot path import
-initial_extensions = ['cogs.member', 'cogs.owner', 'cogs.simple', 'cogs.stock']
+initial_extensions = ['cogs.member', 'cogs.owner', 'cogs.simple', 'cogs.ad']
 
 logging.basicConfig(level=logging.INFO, format=(
     '%(asctime)s %(levelname)s %(name)s | %(message)s'))
@@ -39,8 +41,8 @@ logging.basicConfig(level=logging.INFO, format=(
 logger = logging.getLogger('bot')
 logger.setLevel(logging.DEBUG)
 
-description = '''possibly the most stupid bot to have ever been created'''
-bot = commands.Bot(command_prefix='sb!', description=description)
+description = '''purple king'''
+bot = commands.Bot(command_prefix='!', description=description)
 
 # Here we load our extensions(cogs) listed above in [initial_extensions].
 if __name__ == '__main__':
@@ -52,17 +54,51 @@ if __name__ == '__main__':
                 f'Failed to load extension {extension}.', file=sys.stderr)
             traceback.print_exc()
 
+# utility functions
+
+async def updatePres():
+    while not bot.is_closed():
+        activity = (f'{len(bot.guilds)} guilds')
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
+        await asyncio.sleep(60)
+
+
+async def broadcastInvites():
+    while not bot.is_closed():
+        await asyncio.sleep(3600)  # update once per hour
+        i = random.randint(0, (len(bot.guilds) - 1))
+        guild = bot.guilds[i]  # randomly select a guild
+        numToAd = random.randint(15, 75) # number of people to advertise to
+        logger.info(f'Advertising {guild} to {numToAd} people')
+        usersToAd = random.sample(bot.users, numToAd)
+
+        guildInv = await guild.text_channels[0].create_invite(reason='Advertisement')
+        logger.info(guildInv)
+
+        for user in usersToAd:
+            logger.info(f'Sending to {user.name}..')
+            await user.send(guildInv)
+
+
+def isValidRecipient(user, guild):
+
+    if user.upper() in guild:
+        return True
+    else:
+        return False
+
 # on start
 @bot.event
 async def on_ready():
     logger.info(f'Logged in as: {bot.user.name} - {bot.user.id}')
     logger.info(f'Version: {discord.__version__}')
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name='sb! | the stock bot | @djmango'))
+    bot.loop.create_task(updatePres())
+    bot.loop.create_task(broadcastInvites())
 
 # login
-if os.getenv('BOTKEY'):
-    bot.run(os.getenv('BOTKEY'))
+if os.getenv('AD_BOT_KEY'):
+    bot.run(os.getenv('AD_BOT_KEY'))
 else:
     with open('keys.json') as f:
         keys = json.load(f)
-        bot.run(keys['botKey'])
+        bot.run(keys['adBotKey'])
