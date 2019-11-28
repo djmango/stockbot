@@ -7,8 +7,6 @@ import discord
 from pathlib import Path
 from discord.ext import commands
 
-IEX_ENDPOINT = 'https://api.iextrading.com/1.0/'
-
 logger = logging.getLogger('bot.ad')
 
 # utility functions
