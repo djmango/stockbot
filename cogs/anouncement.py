@@ -63,14 +63,14 @@ class AnouncementCog(commands.Cog):
 
     @commands.command(name='add', aliases=['plus'], pass_context=True)
     @commands.guild_only()
-    async def do_addition(self, ctx, first: int, second: int):
+    async def do_addition2(self, ctx, first: int, second: int):
         """A simple command which does addition on two integer values."""
 
         total = first + second
         await ctx.channel.send(f'The sum of **{first}** and **{second}**  is  **{total}**')
 
     @commands.command(pass_context=True, name='roll')
-    async def roll(self, ctx, dice: str):
+    async def roll2(self, ctx, dice: str):
         """Rolls a dice in NdN format."""
 
         try:
@@ -84,20 +84,9 @@ class AnouncementCog(commands.Cog):
         await ctx.channel.send(result)
 
     @commands.command(description='For when you wanna settle the score some other way', pass_context=True, name="choose")
-    async def choose(self, ctx, *choices: str):
+    async def choose2(self, ctx, *choices: str):
         """Chooses between multiple choices."""
         await ctx.channel.send(random.choice(choices))
-
-    async def on_member_ban(self, guild, user):
-        """Event Listener which is called when a user is banned from the guild.
-        For this example I will keep things simple and just log some info.
-        Notice how because we are in a cog class we do not need to use @bot.event
-        For more information:
-        http://discordpy.readthedocs.io/en/rewrite/api.html#discord.on_member_ban
-        Check above for a list of events.
-        """
-        logging.info(
-            f'{user.name}-{user.id} was banned from {guild.name}-{guild.id}')
 
 
 def setup(bot):

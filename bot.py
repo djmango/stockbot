@@ -21,7 +21,7 @@ if os.getenv('BOTKEY') is None:
 
 # Below cogs represents our folder our cogs are in. Following is the file name. So 'meme.py' in cogs, would be cogs.meme
 # Think of it like a dot path import
-initial_extensions = ['cogs.member', 'cogs.owner', 'cogs.simple']
+initial_extensions = ['cogs.member', 'cogs.anouncement', 'cogs.simple']
 
 logging.basicConfig(level=logging.INFO, format=(
     '%(asctime)s %(levelname)s %(name)s | %(message)s'))
@@ -67,7 +67,6 @@ async def yell():
 async def on_ready():
     logger.info(f'Logged in as: {bot.user.name} - {bot.user.id}')
     logger.info(f'Version: {discord.__version__}')
-    await yell()
 
 # login
 bot.run(os.getenv('BOTKEY'))
