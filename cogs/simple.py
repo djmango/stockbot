@@ -45,7 +45,6 @@ class SimpleCog(commands.Cog):
         embed = discord.Embed(title="Type !help command for more info on a command.",
                               description="You can also type !help category for more info on a category.", colour=discord.Colour.purple())
         embed.set_author(name="Commands", icon_url="https://cdn.discordapp.com/attachments/564478629048746004/564526110608719903/icon_2.png")
-        embed.add_field(name='ad', value='enable your server for advertising', inline=True)
         embed.add_field(name='joined', value='Says when a member joined', inline=True)
         embed.add_field(name='perms', value='A simple command which checks a members Guild Permissions', inline=True)
         embed.add_field(name='top_role', value='Simple command which shows the members Top Role', inline=True)
