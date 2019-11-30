@@ -52,7 +52,7 @@ class AnouncementCog(commands.Cog):
         """ dm all """
         msg = msg[1:]
         fullMsg = ' '.join(msg)
-        ctx.author.send('okay, sending the message master ;)')
+        await ctx.author.send('okay, sending the message master ;)')
 
         for user in self.bot.users:
             try:
@@ -65,10 +65,15 @@ class AnouncementCog(commands.Cog):
     @commands.command(pass_context=True, name='dmrole')
     @commands.guild_only()
     async def dmrole(self, ctx, *msg):
+        if not canYell(ctx.author.top_role):
+            await ctx.author.send('you cant do that doofus')
+            return
+        
         fullMsg = ' '.join(msg[1:])
 
         # get all members
         members = ctx.guild.members
+        await ctx.author.send('okay, sending the message master ;)')
 
         # from all members, get the ones with the roles we want
         for role in ctx.message.role_mentions:
