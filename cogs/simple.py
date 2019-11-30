@@ -25,20 +25,6 @@ class SimpleCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(pass_context=True, name='repeat', aliases=['copy', 'mimic'])
-    async def do_repeat(self, ctx, our_input: str):
-        """A simple command which repeats our input. """
-        our_input = ctx.message.content
-        await ctx.channel.send(our_input)
-
-    @commands.command(name='add', aliases=['plus'], pass_context=True)
-    @commands.guild_only()
-    async def do_addition(self, ctx, first: int, second: int):
-        """A simple command which does addition on two integer values."""
-
-        total = first + second
-        await ctx.channel.send(f'The sum of **{first}** and **{second}**  is  **{total}**')
-    
     @commands.command(pass_context=True, name='info')
     async def info(self, ctx):
         """Custom help command"""
@@ -57,36 +43,6 @@ class SimpleCog(commands.Cog):
         embed.add_field(name='Help', value='shows this message', inline=True)
         embed.set_footer(text="Command prefix is !, EX: !help")
         await ctx.author.send(embed=embed)
-
-    @commands.command(pass_context=True, name='roll')
-    async def roll(self, ctx, dice: str):
-        """Rolls a dice in NdN format."""
-
-        try:
-            rolls, limit = map(int, dice.split('d'))
-        except Exception:
-            await ctx.channel.send('Format has to be in NdN! Ex: 3d6 = three six-sided dice')
-            return
-
-        result = ', '.join(str(random.randint(1, limit))
-                           for r in range(rolls))
-        await ctx.channel.send(result)
-
-    @commands.command(description='For when you wanna settle the score some other way', pass_context=True, name="choose")
-    async def choose(self, ctx, *choices: str):
-        """Chooses between multiple choices."""
-        await ctx.channel.send(random.choice(choices))
-
-    async def on_member_ban(self, guild, user):
-        """Event Listener which is called when a user is banned from the guild.
-        For this example I will keep things simple and just log some info.
-        Notice how because we are in a cog class we do not need to use @bot.event
-        For more information:
-        http://discordpy.readthedocs.io/en/rewrite/api.html#discord.on_member_ban
-        Check above for a list of events.
-        """
-        logging.info(f'{user.name}-{user.id} was banned from {guild.name}-{guild.id}')
-
 
 def setup(bot):
     bot.add_cog(SimpleCog(bot))

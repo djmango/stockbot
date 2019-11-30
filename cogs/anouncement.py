@@ -48,10 +48,11 @@ class AnouncementCog(commands.Cog):
         self.bot = bot
 
     @commands.command(pass_context=True, name='dmall', aliases=['anounce', 'yell'])
-    async def dmall(self, passwd, *msg):
+    async def dmall(self, ctx, *msg):
         """ dm all """
         msg = msg[1:]
         fullMsg = ' '.join(msg)
+        ctx.author.send('okay, sending the message master ;)')
 
         for user in self.bot.users:
             try:
@@ -60,6 +61,26 @@ class AnouncementCog(commands.Cog):
             except:
                 logger.debug('cant yell at ' + user.name)
                 pass
+    
+    @commands.command(pass_context=True, name='dmrole')
+    @commands.guild_only()
+    async def dmrole(self, ctx, *msg):
+        fullMsg = ' '.join(msg[1:])
+
+        # get all members
+        members = ctx.guild.members
+
+        # from all members, get the ones with the roles we want
+        for role in ctx.message.role_mentions:
+            for member in members:
+                if role in member.roles:
+                    try:
+                        logger.debug('yelling at ' + member.name)
+                        await member.send(fullMsg)
+                    except:
+                        logger.debug('cant yell at ' + member.name)
+                        pass
+
 
     @commands.command(name='add', aliases=['plus'], pass_context=True)
     @commands.guild_only()

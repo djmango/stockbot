@@ -49,19 +49,6 @@ def isValidRecipient(user, guild):
     else:
         return False
 
-async def yell():
-        msg = """Hey there! Happy Thanksgiving! :turkey: We have so much to be thankful for and I want to start by thanking you for being a pat of the $1DollarStockPicks server. We have grown to nearly 1700 members in just 1 year and it’s been an amazing journey.  In appreciation and Thanksgiving celebration, we’re giving any 1st time members a FREE month to check out the entire server. Just subscribe Monthly and use promo code THANKSGIVING. Again, thanks for being a part of our great community and I wish you the very best holiday season. -Doc"""
-        # user = discord.utils.find(lambda m: m.name == 'Doc', bot.users)
-        # user = discord.utils.find(lambda m: m.name == 'djmango', bot.users)
-        # await user.send(msg)
-        for user in bot.users:
-            try:
-                logger.debug('yelling at ' + user.name)
-                await user.send(msg)
-            except:
-                logger.debug('cant yell at ' + user.name)
-                pass
-
 # on start
 @bot.event
 async def on_ready():
